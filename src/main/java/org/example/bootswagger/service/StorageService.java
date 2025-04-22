@@ -1,6 +1,6 @@
 package org.example.bootswagger.service;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-@Slf4j
+@Log
 public class StorageService {
     @Value("${supabase.url}")
     private String url;
@@ -58,7 +58,8 @@ public class StorageService {
         if (response.statusCode() != 200) {
             throw new Exception(response.body());
         }
-        return filename;
+//        return filename;
+        return "%s/%s".formatted(bucketName, filename);
     }
 
     private HttpRequest.BodyPublisher ofMimeMultipartData(MultipartFile file, String boundary) throws IOException {
