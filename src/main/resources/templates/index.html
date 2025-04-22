@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="${title}"></title>
+    <style>
+        @font-face {
+            font-family: 'MarinesBold';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2502-1@1.0/MarinesBold.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            padding: 1rem;
+            font-family: 'MarinesBold', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<h1>파일 업로드</h1>
+<section>
+    <form id="file-form">
+        <label>
+            파일 : <input type="file" id="file-input" accept=".pdf, .xlsx, .xls, image/*">
+        </label>
+        <button type="submit">제출</button>
+    </form>
+</section>
+<section>
+    <!-- 파일 목록 들어간다 -->
+</section>
+<script>
+    const fileForm = document.querySelector('#file-form');
+    const fileInput = document.querySelector('#file-input');
+    fileForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        console.log(fileInput.files);
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append('files', file);
+        const response = await fetch("/api/file",{
+            method: "POST",
+            body: formData,
+        });
+        console.log(response.status);
+        if (response.status == 200) {
+            alert("업로드가 되었습니다.");
+        } else {
+            alert("업로드에 실패했습니다");
+        }
+        fileInput.value = ""; // 업로드된 파일 리셋. 비동기 처리라서 직전 데이터가 남아있기 때문
+    });
+</script>
+</body>
+</html>
