@@ -46,7 +46,7 @@ public class FileController {
     @GetMapping("/{bucketName}/{filename}")
     public ResponseEntity<byte[]> file(@PathVariable String bucketName, @PathVariable String filename) {
         try {
-            byte[] fileBytes = storageService.download("%s/%s".formatted(bucketName, filename)); // 버킷 -> 파일 이름 요청
+            byte[] fileBytes = storageService.download(bucketName, filename);
 
             // 페이지(템플릿)로 응답하지 않고, 데이터로 응답하겠다
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"").contentType(MediaType.APPLICATION_OCTET_STREAM).body(fileBytes);

@@ -72,10 +72,9 @@ public class StorageService {
         return HttpRequest.BodyPublishers.ofByteArrays(byteArrays);
     }
 
-    public byte[] download(String filename) throws Exception{
+    public byte[] download(String bucketName, String filename) throws Exception{
         HttpRequest request = HttpRequest.newBuilder()
-//                .uri(URI.create("%s/storage/v1/object/%s/%s".formatted(url, bucketName, filename)))
-                .uri(URI.create("%s/storage/v1/object/%s".formatted(url, filename)))
+                .uri(URI.create("%s/storage/v1/object/%s/%s".formatted(url, bucketName, filename)))
                 .header("Authorization", "Bearer %s".formatted(accessKey))
                 .GET()
                 .build();
