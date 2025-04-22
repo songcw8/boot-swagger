@@ -35,28 +35,43 @@
     </form>
 </section>
 <section>
-    <!-- 파일 목록 들어간다 -->
+    <section id="file-list"></section>
 </section>
 <script>
     const fileForm = document.querySelector('#file-form');
     const fileInput = document.querySelector('#file-input');
+    const fileList = document.querySelector('#file-list');
     fileForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         console.log(fileInput.files);
         const file = fileInput.files[0];
         const formData = new FormData();
         formData.append('files', file);
-        const response = await fetch("/api/file",{
-            method: "POST",
+        const response = await fetch("/api/file", {
+            method: 'POST',
             body: formData,
         });
         console.log(response.status);
-        if (response.status == 200) {
-            alert("업로드가 되었습니다.");
+        if (response.status === 200) {
+            alert("업로드 되었습니다!");
+            fileInput.value = ""; // 업로드된 파일 리셋. 비동기 처리라서 직전 데이터가 남아있기 때문
+            await getFiles();
         } else {
-            alert("업로드에 실패했습니다");
+            alert("업로드가 실패했습니다!");
         }
-        fileInput.value = ""; // 업로드된 파일 리셋. 비동기 처리라서 직전 데이터가 남아있기 때문
+    });
+    async function getFiles() {
+        const response = await fetch("/api/file", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        fileList.innerHTML = JSON.stringify(data);
+    }
+    document.addEventListener('DOMContentLoaded', async () => {
+        await getFiles();
     });
 </script>
 </body>
